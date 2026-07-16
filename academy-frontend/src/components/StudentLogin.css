@@ -1,0 +1,165 @@
+/* ── Student Login ── */
+:root {
+  --bg:           #13151F;
+  --surface:      #1E2235;
+  --card:         #252A3D;
+  --accent:       #7C6FFF;
+  --accent-soft:  #7C6FFF25;
+  --accent-hover: #9B90FF;
+  --success:      #28D468;
+  --warning:      #F5A623;
+  --danger:       #F55252;   /* ← fix pannunga */
+  --text:         #EEF2F7;   /* ← add pannunga */
+  --muted:        #7A8BA8;
+  --border:       #333A55;
+    --text: #EEF2F7; 
+
+}
+.login-wrap {
+  min-height: 100vh;
+  background: #0F1117;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.login-card {
+  background: #21253A;
+  border: 1px solid #2D3148;
+  border-radius: 16px;
+  padding: 40px;
+  width: 420px;
+  max-width: 95vw;
+}
+
+.login-logo {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6C63FF, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+
+.login-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #E2E8F0;
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  font-size: 13px;
+  color: #64748B;
+  margin-bottom: 28px;
+}
+
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.login-form-group label {
+  font-size: 11px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.login-input {
+  background: #1A1D27;
+  border: 1px solid #2D3148;
+  border-radius: 9px;
+  padding: 11px 14px;
+  color: #E2E8F0;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.login-input:focus {
+  border-color: #6C63FF;
+}
+
+/* Password field */
+.login-pass-wrap {
+  position: relative;
+}
+
+.login-pass-wrap .login-input {
+  padding-right: 44px;
+}
+
+.login-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.login-eye-btn:hover {
+  color: #E2E8F0;
+}
+
+/* Error */
+.login-error {
+  background: #EF444422;
+  color: #EF4444;
+  border: 1px solid #EF4444;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* Submit button */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #6C63FF, #8B5CF6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+  font-family: inherit;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
+}
+
+/* Footer */
+.login-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 20px;
+}
+
+.login-link {
+  color: #6C63FF;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link:hover {
+  color: #8B85FF;
+}

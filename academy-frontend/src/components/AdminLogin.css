@@ -1,0 +1,105 @@
+/* ---------------- Admin Login ---------------- */
+
+:root {
+  --bg:           #13151F;
+  --surface:      #1E2235;
+  --card:         #252A3D;
+  --accent:       #7C6FFF;
+  --accent-soft:  #7C6FFF25;
+  --accent-hover: #9B90FF;
+  --success:      #28D468;
+  --warning:      #F5A623;
+  --danger:       #F55252;   /* ← fix pannunga */
+  --text:         #EEF2F7;   /* ← add pannunga */
+  --muted:        #7A8BA8;
+  --border:       #333A55;
+    --text: #EEF2F7; 
+
+}
+
+.admin-login-container {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.admin-login-title {
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.admin-login-sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.admin-input-group {
+  margin-bottom: 20px;
+}
+
+.admin-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.admin-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.admin-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.admin-login-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-login-btn:hover {
+  background: var(--accent-hover);
+}
+
+.admin-demo {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}

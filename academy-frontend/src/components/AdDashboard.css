@@ -1,0 +1,519 @@
+/* ── Admin Dashboard ── */
+:root {
+  --bg:           #13151F;
+  --surface:      #1E2235;
+  --card:         #252A3D;
+  --accent:       #7C6FFF;
+  --accent-soft:  #7C6FFF25;
+  --accent-hover: #9B90FF;
+  --success:      #28D468;
+  --warning:      #F5A623;
+  --danger:       #F55252;   /* ← fix pannunga */
+  --text:         #EEF2F7;   /* ← add pannunga */
+  --muted:        #7A8BA8;
+  --border:       #333A55;
+    --text: #EEF2F7; 
+
+}
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+.admin-stat-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.admin-stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.admin-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Admin Table ── */
+.admin-table-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.admin-table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table-head h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: var(--surface);
+}
+
+/* ── Admin Badge ── */
+.admin-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-badge.pending {
+  background: #F59E0B22;
+  color: var(--warning);
+}
+
+.admin-badge.approved {
+  background: #22C55E22;
+  color: var(--success);
+}
+
+.admin-badge.rejected {
+  background: #EF444422;
+  color: var(--danger);
+}
+
+/* ── Admin Tag ── */
+.admin-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+
+
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .admin-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+
+/* ---------------------request---------------------- */
+
+/* ── Admin Avatar ── */
+.admin-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #A78BFA);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.page-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;  /* ← add pannunga */
+}
+
+/* ── Admin Buttons ── */
+.admin-btn-approve {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #22C55E22;
+  color: var(--success);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.admin-btn-approve:hover {
+  background: #22C55E44;
+}
+
+.admin-btn-reject {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #EF444422;
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.admin-btn-reject:hover {
+  background: #EF444444;
+}
+
+
+/* --------------------StudentsPage--------------------------- */
+
+/* ── Search + Filter ── */
+.admin-search {
+  flex: 1;
+  padding: 9px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+
+.admin-search:focus {
+  border-color: var(--accent);
+}
+
+.admin-select {
+  padding: 9px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.admin-select:focus {
+  border-color: var(--accent);
+}
+
+/* Active badge */
+.admin-badge.active {
+  background: #38BDF822;
+  color: #38BDF8;
+}
+
+
+/* ---------------------Curses Pages---------------------------- */
+
+
+/* ── Course Grid ── */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.course-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+
+.course-card:hover {
+  border-color: var(--accent);
+}
+
+.course-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.course-meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.course-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ── Modal ── */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.admin-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  width: 480px;
+  z-index: 100;
+}
+
+.admin-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.admin-form-group label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.admin-input:focus {
+  border-color: var(--accent);
+}
+
+/* ── Buttons ── */
+.admin-btn-primary {
+  padding: 9px 18px;
+  border-radius: 9px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.admin-btn-edit {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.admin-btn-cancel {
+  padding: 9px 18px;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-modal {
+    width: 90%;
+  }
+}
+
+
+/* ----------------------syllabus----------------------- */
+
+
+
+/* ── Syllabus ── */
+.syllabus-module-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.syllabus-module-card:hover {
+  border-color: var(--accent);
+}
+
+.syllabus-module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+}
+
+.syllabus-module-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.syllabus-topics {
+  padding: 8px 20px 16px 68px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.syllabus-topic-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.syllabus-topic-item:last-child {
+  border-bottom: none;
+}
+
+
+
+/* ------------------Assignment------------------------ */
+
+/* ── Filter Tabs ── */
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-tab:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.filter-tab.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+
+/* ------------------Notification Page---------------------------- */
+
+/* ── Notification Card ── */
+.notif-card-admin {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.notif-card-admin:hover {
+  border-color: var(--accent);
+}
+
+.notif-card-icon {
+  font-size: 24px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
