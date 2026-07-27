@@ -1,5 +1,7 @@
 import React from 'react'
 import "../components/StudentDashboard.css";
+import { logout } from "../utils/auth";
+import { MdMenuBook } from "react-icons/md";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -22,7 +24,7 @@ const sideItems = [
   {
     id: "Syllabus",
     label: "Syllabus",
-    icon: <FaBook />,
+    icon: <MdMenuBook />,
     path: "/StudentDashboard/syllabus",
   },
   {
@@ -57,8 +59,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
    const navigate = useNavigate();
   
   const logoutHandle = () => {
+    logout("student");
     localStorage.removeItem("currentUser");
-    navigate("/Studreg");
+    navigate("/studentlogin");
   };
   return (
     <>

@@ -22,20 +22,95 @@
 /* ── Login Page ── */
 .mentor-login-wrap {
   min-height: 100vh;
-  background: var(--bg);
+  background: #090814;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Inter', 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.mentor-login-wrap::before,
+.mentor-login-wrap::after,
+.mentor-orb-1,
+.mentor-orb-2 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatMentorOrb 18s ease-in-out infinite alternate;
+}
+
+.mentor-orb-1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #c084fc 0%, #6366f1 70%);
+  top: -120px;
+  left: -100px;
+  animation-duration: 16s;
+}
+
+.mentor-orb-2 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, #38bdf8 0%, #3b82f6 70%);
+  bottom: -160px;
+  right: -120px;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.mentor-login-wrap::before {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #f472b6 0%, #a855f7 70%);
+  top: 35%;
+  left: 25%;
+  animation-duration: 14s;
+  animation-delay: -3s;
+}
+
+.mentor-login-wrap::after {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #818cf8 0%, #06b6d4 70%);
+  bottom: 25%;
+  right: 25%;
+  animation-duration: 20s;
+  animation-delay: -8s;
+}
+
+@keyframes floatMentorOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(70px, -60px) scale(1.18);
+  }
+  100% {
+    transform: translate(-50px, 50px) scale(0.92);
+  }
 }
 
 .mentor-login-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 36px;
+  background: rgba(30, 34, 53, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 44px;
   width: 420px;
   max-width: 95vw;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.mentor-login-card:hover {
+  border-color: rgba(124, 111, 255, 0.4);
 }
 
 .mentor-login-logo {
@@ -480,6 +555,8 @@
 .overlay {
   position: fixed;
   inset: 0;
+   top:60px;
+  height:calc(100vh - 60px);
   background: rgba(0,0,0,.35);
   z-index: 999;
 }
@@ -497,7 +574,7 @@
   .mentor-sidebar {
     position: fixed;
     left: -260px;
-    top: 0;
+   top: 60px;
     width: 250px;
     height: 100vh;
     transition: .3s;
@@ -511,7 +588,12 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-  .mentor-sidebar { display: none; }
-  .mentor-content { margin-left: 0; }
-  .mentor-stat-grid { grid-template-columns: 1fr 1fr; }
+  .mentor-content {
+    margin-left: 0;
+  }
+
+  .mentor-stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
+

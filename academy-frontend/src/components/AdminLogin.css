@@ -18,21 +18,92 @@
 }
 
 .admin-login-container {
-  min-height: calc(100vh - 60px);
+  min-height: 100vh;
+  background: #090814;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-login-container::before,
+.admin-login-container::after,
+.admin-orb-1,
+.admin-orb-2 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatAdminOrb 18s ease-in-out infinite alternate;
+}
+
+.admin-orb-1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #c084fc 0%, #6366f1 70%);
+  top: -120px;
+  left: -100px;
+  animation-duration: 16s;
+}
+
+.admin-orb-2 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, #38bdf8 0%, #3b82f6 70%);
+  bottom: -160px;
+  right: -120px;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.admin-login-container::before {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #f472b6 0%, #a855f7 70%);
+  top: 35%;
+  left: 25%;
+  animation-duration: 14s;
+  animation-delay: -3s;
+}
+
+.admin-login-container::after {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #818cf8 0%, #06b6d4 70%);
+  bottom: 25%;
+  right: 25%;
+  animation-duration: 20s;
+  animation-delay: -8s;
+}
+
+@keyframes floatAdminOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(70px, -60px) scale(1.18);
+  }
+  100% {
+    transform: translate(-50px, 50px) scale(0.92);
+  }
 }
 
 .admin-login-card {
   width: 100%;
   max-width: 450px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: rgba(30, 34, 53, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
 }
 
 .admin-login-title {
@@ -103,3 +174,19 @@
   font-size: 13px;
   text-align: center;
 }
+
+.admin-login-error {
+  background: rgba(245, 82, 82, 0.12);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.admin-login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/MentorDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const NewStudents = () => {
   const currentMentor = JSON.parse(localStorage.getItem("currentMentor"));
@@ -12,7 +14,7 @@ const NewStudents = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/students");
+      const response = await authFetch("/api/students");
       const data = await response.json();
 
       const formatted = data.map((s) => ({
@@ -32,7 +34,7 @@ const NewStudents = () => {
       setStudents(formatted);
     } catch (error) {
       console.log(error);
-      alert("Students load aagala. Backend check pannunga.");
+      showToast("Failed to load student list. Please check backend connection.", "error");
     }
   };
 
@@ -56,23 +58,20 @@ const NewStudents = () => {
 
   const submitReview = async () => {
     if (!recommendation) {
-      alert("Please select Approve or Reject!");
+      showToast("Please select an Approve or Reject recommendation.", "warning");
       return;
     }
 
     if (!comment.trim()) {
-      alert("Please add a comment!");
+      showToast("Please enter a review comment.", "warning");
       return;
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/students/${selectedStudent.id}/mentor-review`,
+      const response = await authFetch(
+        `/api/students/${selectedStudent.id}/mentor-review`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             mentorRecommendation: recommendation,
             mentorComment: comment,
@@ -81,16 +80,16 @@ const NewStudents = () => {
       );
 
       if (!response.ok) {
-        alert("Review submit failed");
+        showToast("Failed to submit student review.", "error");
         return;
       }
 
       await fetchStudents();
       setShowModal(false);
-      alert(`Review submitted for ${selectedStudent.Fname}!`);
+      showToast(`Review submitted successfully for ${selectedStudent.Fname}!`, "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 

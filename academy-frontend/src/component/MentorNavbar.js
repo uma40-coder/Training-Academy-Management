@@ -1,5 +1,4 @@
 import React from "react";
-import { FaBell } from "react-icons/fa";
 import "../components/MentorDashboard.css";
 
 const MentorNavbar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -27,10 +26,6 @@ const MentorNavbar = ({ sidebarOpen, setSidebarOpen }) => {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <button className="navbar-icon-btn">
-          <FaBell />
-        </button>
-
         <div className="navbar-user">
           <div
             className="mentor-avatar"

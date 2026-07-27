@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../components/MentorDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
+import { MdEdit } from "react-icons/md";
 
 const MentorProfile = () => {
   const currentMentor = JSON.parse(localStorage.getItem("currentMentor"));
@@ -18,7 +21,7 @@ const MentorProfile = () => {
   useEffect(() => {
     const fetchMentor = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/mentors");
+        const response = await authFetch("/api/mentors");
         const data = await response.json();
 
         const freshMentor = data.find((m) => m.id === currentMentor.id);
@@ -47,19 +50,16 @@ const MentorProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/mentors/${mentor.id}`,
+      const response = await authFetch(
+        `/api/mentors/${mentor.id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify(form),
         },
       );
 
       if (!response.ok) {
-        alert("Profile update failed");
+        showToast("Failed to update profile.", "error");
         return;
       }
 
@@ -68,10 +68,10 @@ const MentorProfile = () => {
       setMentor(updatedMentor);
       localStorage.setItem("currentMentor", JSON.stringify(updatedMentor));
       setEditing(false);
-      alert("Profile updated!");
+      showToast("Profile updated successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
@@ -257,7 +257,7 @@ const MentorProfile = () => {
               className="mentor-btn-primary"
               onClick={() => setEditing(true)}
             >
-              ✏️ Edit Profile
+              <MdEdit /> Edit Profile
             </button>
           )}
         </div>

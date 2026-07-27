@@ -1,16 +1,88 @@
 /* ── Student Registration ── */
 .form_container {
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  background: #0F1117;
+  background: #090814;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.form_container::before,
+.form_container::after,
+.reg-orb-1,
+.reg-orb-2 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(95px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatRegOrb 18s ease-in-out infinite alternate;
+}
+
+.reg-orb-1 {
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, #c084fc 0%, #6366f1 70%);
+  top: -120px;
+  left: -100px;
+  animation-duration: 16s;
+}
+
+.reg-orb-2 {
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, #38bdf8 0%, #3b82f6 70%);
+  bottom: -160px;
+  right: -120px;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.form_container::before {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #f472b6 0%, #a855f7 70%);
+  top: 35%;
+  left: 20%;
+  animation-duration: 14s;
+  animation-delay: -3s;
+}
+
+.form_container::after {
+  width: 440px;
+  height: 440px;
+  background: radial-gradient(circle, #818cf8 0%, #06b6d4 70%);
+  bottom: 20%;
+  right: 20%;
+  animation-duration: 20s;
+  animation-delay: -8s;
+}
+
+@keyframes floatRegOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(70px, -60px) scale(1.18);
+  }
+  100% {
+    transform: translate(-50px, 50px) scale(0.92);
+  }
+}
+
+.stud_head, .form_container h5 {
+  position: relative;
+  z-index: 1;
 }
 
 .stud_head {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
   background: linear-gradient(135deg, #6C63FF, #A78BFA);
   -webkit-background-clip: text;
@@ -21,7 +93,7 @@
 }
 
 .form_container h5 {
-  color: #64748B;
+  color: #94A3B8;
   font-size: 14px;
   font-weight: 400;
   text-align: center;
@@ -32,11 +104,15 @@
 .formfill {
   width: 90%;
   max-width: 860px;
-  background: #21253A;
-  border: 1px solid #2D3148;
-  border-radius: 16px;
+  background: rgba(30, 34, 53, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   padding: 36px;
   margin-bottom: 40px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Form Group ── */

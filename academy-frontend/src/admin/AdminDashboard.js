@@ -1,19 +1,23 @@
-import React from 'react'
-import AdminNavbar from '../component/AdminNavbar';
-import AdminSidebar from '../component/AdminSidebar';
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import AdminNavbar from "../component/AdminNavbar";
+import AdminSidebar from "../component/AdminSidebar";
 import "../components/AdDashboard.css";
-import { Outlet } from 'react-router-dom';
-const AdminDashboard = () => {
 
+const AdminDashboard = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="dash-main">
-      {" "}
-      {/* ← add pannunga */}
-      <AdminNavbar />
+      <AdminNavbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
       <div className="app-body">
-        <AdminSidebar />
-        <div className="content">
+        <AdminSidebar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+
+        <div className="dash-content">
           <Outlet />
         </div>
       </div>
@@ -21,6 +25,4 @@ const AdminDashboard = () => {
   );
 };
 
-
-
-export default AdminDashboard
+export default AdminDashboard;

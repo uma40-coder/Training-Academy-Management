@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -14,12 +16,12 @@ const Courses = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/courses");
+      const response = await authFetch("/api/courses");
       const data = await response.json();
       setCourses(data);
     } catch (error) {
       console.log(error);
-      alert("Courses load aagala. Backend running check pannunga.");
+      showToast("Failed to load courses. Please check backend connection.", "error");
     }
   };
 
@@ -46,7 +48,7 @@ const Courses = () => {
 
   const handleSave = async () => {
     if (!form.name.trim()) {
-      alert("Course name required!");
+      showToast("Course name is required.", "warning");
       return;
     }
 
@@ -59,51 +61,50 @@ const Courses = () => {
 
     try {
       const url = editId
-        ? `http://localhost:8080/api/courses/${editId}`
-        : "http://localhost:8080/api/courses";
+        ? `/api/courses/${editId}`
+        : "/api/courses";
 
       const method = editId ? "PUT" : "POST";
 
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(courseData),
       });
 
       if (!response.ok) {
-        alert("Save failed");
+        showToast("Failed to save course details.", "error");
         return;
       }
 
       await fetchCourses();
       setShowModal(false);
+      showToast(editId ? "Course updated successfully!" : "New course added successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this course?")) {
+    if (!window.confirm("Are you sure you want to delete this course?")) {
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/courses/${id}`, {
+      const response = await authFetch(`/api/courses/${id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-        alert("Delete failed");
+        showToast("Failed to delete course.", "error");
         return;
       }
 
       await fetchCourses();
+      showToast("Course deleted successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 

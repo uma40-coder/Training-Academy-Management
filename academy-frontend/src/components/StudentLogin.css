@@ -15,22 +15,94 @@
     --text: #EEF2F7; 
 
 }
+/* ── Bubbles Animated Motion Background ── */
 .login-wrap {
   min-height: 100vh;
-  background: #0F1117;
+  background: #090814;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Inter', 'Segoe UI', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-wrap::before,
+.login-wrap::after,
+.bubble-orb-1,
+.bubble-orb-2 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.bubble-orb-1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #c084fc 0%, #6366f1 70%);
+  top: -120px;
+  left: -100px;
+  animation-duration: 16s;
+}
+
+.bubble-orb-2 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, #38bdf8 0%, #3b82f6 70%);
+  bottom: -160px;
+  right: -120px;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.login-wrap::before {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, #f472b6 0%, #a855f7 70%);
+  top: 35%;
+  left: 25%;
+  animation-duration: 14s;
+  animation-delay: -3s;
+}
+
+.login-wrap::after {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #818cf8 0%, #06b6d4 70%);
+  bottom: 25%;
+  right: 25%;
+  animation-duration: 20s;
+  animation-delay: -8s;
+}
+
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(70px, -60px) scale(1.18);
+  }
+  100% {
+    transform: translate(-50px, 50px) scale(0.92);
+  }
 }
 
 .login-card {
-  background: #21253A;
-  border: 1px solid #2D3148;
-  border-radius: 16px;
+  background: rgba(30, 34, 53, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
   padding: 40px;
   width: 420px;
   max-width: 95vw;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
 }
 
 .login-logo {
@@ -162,4 +234,189 @@
 
 .login-link:hover {
   color: #8B85FF;
+}
+
+.login-forgot-btn {
+  background: none;
+  border: none;
+  color: #7C6FFF;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.login-forgot-btn:hover {
+  color: #9B90FF;
+  text-decoration: underline;
+}
+
+/* ── Forgot Password Modal ── */
+.fp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 8, 20, 0.75);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fp-modal-card {
+  background: rgba(30, 34, 53, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 32px 36px;
+  width: 440px;
+  max-width: 92vw;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  position: relative;
+  animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.fp-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #94A3B8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.fp-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.fp-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #EEF2F7;
+  margin-bottom: 6px;
+}
+
+.fp-sub {
+  font-size: 13px;
+  color: #94A3B8;
+  margin-bottom: 22px;
+  line-height: 1.4;
+}
+
+.fp-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.fp-step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.fp-step-dot.active {
+  background: #7C6FFF;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(124, 111, 255, 0.5);
+}
+
+.fp-step-dot.done {
+  background: #28D468;
+  color: #fff;
+}
+
+.fp-step-line {
+  flex: 1;
+  max-width: 40px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fp-step-line.active {
+  background: #7C6FFF;
+}
+
+.fp-success-msg {
+  background: rgba(40, 212, 104, 0.12);
+  border: 1px solid rgba(40, 212, 104, 0.3);
+  color: #28D468;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.fp-otp-hint {
+  background: rgba(124, 111, 255, 0.15);
+  border: 1px dashed #7C6FFF;
+  color: #9B90FF;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.fp-resend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #94A3B8;
+}
+
+.fp-resend-btn {
+  background: none;
+  border: none;
+  color: #38BDF8;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.fp-resend-btn:hover {
+  color: #7dd3fc;
+  text-decoration: underline;
+}
+
+.fp-resend-btn:disabled {
+  color: #64748B;
+  cursor: not-allowed;
+  text-decoration: none;
 }

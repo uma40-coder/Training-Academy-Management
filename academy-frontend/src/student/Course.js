@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { authFetch } from "../utils/api";
+import { RiMoneyRupeeCircleFill } from "react-icons/ri";
+import { FaBusinessTime } from "react-icons/fa6";
+import { FaBook } from "react-icons/fa6";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 const Course = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -9,9 +14,7 @@ const Course = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch(
-          "http://localhost:8080/api/students",
-        );
+        const studentsResponse = await authFetch("/api/students");
         const studentsData = await studentsResponse.json();
 
         const freshStudent = studentsData.find(
@@ -20,9 +23,7 @@ const Course = () => {
 
         setStudent(freshStudent);
 
-        const coursesResponse = await fetch(
-          "http://localhost:8080/api/courses",
-        );
+        const coursesResponse = await authFetch("/api/courses");
         const coursesData = await coursesResponse.json();
 
         const selectedCourse = coursesData.find(
@@ -31,9 +32,7 @@ const Course = () => {
 
         setCourse(selectedCourse);
 
-        const mentorsResponse = await fetch(
-          "http://localhost:8080/api/mentors",
-        );
+        const mentorsResponse = await authFetch("/api/mentors");
         const mentorsData = await mentorsResponse.json();
 
         const assignedMentor = mentorsData.find(
@@ -65,13 +64,13 @@ const Course = () => {
 
       <div className="dash-cards">
         <div className="dash-card">
-          <div className="dash-card-icon">📚</div>
+          <div className="dash-card-icon"><FaBook /></div>
           <div className="dash-card-label">Course</div>
           <div className="dash-card-value">{student.course}</div>
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">⏳</div>
+          <div className="dash-card-icon"><FaBusinessTime /></div>
           <div className="dash-card-label">Duration</div>
           <div className="dash-card-value">
             {course ? course.duration : "TBD"}
@@ -79,7 +78,7 @@ const Course = () => {
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">💰</div>
+          <div className="dash-card-icon"><RiMoneyRupeeCircleFill /></div>
           <div className="dash-card-label">Fee</div>
           <div className="dash-card-value">
             {course ? `₹${course.fee}` : "TBD"}
@@ -87,7 +86,8 @@ const Course = () => {
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">👨‍🏫</div>
+          <div className="dash-card-icon"><FaChalkboardTeacher />
+</div>
           <div className="dash-card-label">Mentor</div>
           <div className="dash-card-value">
             {mentor ? mentor.name : "Not Assigned"}

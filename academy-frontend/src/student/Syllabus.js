@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../components/StudentDashboard.css";
+import { authFetch } from "../utils/api";
 
 const Syllabus = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -9,7 +10,7 @@ const Syllabus = () => {
   useEffect(() => {
     const fetchSyllabus = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/syllabus");
+        const response = await authFetch("/api/syllabus");
         const data = await response.json();
 
         const courseItems = data.filter(

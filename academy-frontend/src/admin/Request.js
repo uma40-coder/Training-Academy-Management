@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const Request = () => {
  const [students, setStudents] = useState([]);
 
  const fetchStudents = async () => {
    try {
-     const response = await fetch("http://localhost:8080/api/students");
+     const response = await authFetch("/api/students");
      const data = await response.json();
 
      const formatted = data.map((s) => ({
@@ -23,7 +25,7 @@ const Request = () => {
      setStudents(formatted);
    } catch (error) {
      console.log(error);
-     alert("Students load aagala. Backend check pannunga.");
+     showToast("Failed to load student registration requests.", "error");
    }
  };
 
@@ -31,7 +33,6 @@ const Request = () => {
    fetchStudents();
  }, []);
   // ---------------------------------------------
-  // State add pannunga
   const [notifModal, setNotifModal] = useState(false);
   const [notifStudent, setNotifStudent] = useState(null);
   const [notifMessage, setNotifMessage] = useState("");
@@ -48,16 +49,13 @@ const Request = () => {
   // Send
 const sendNotification = async () => {
   if (!notifMessage.trim()) {
-    alert("Message required!");
+    showToast("Notification message is required.", "warning");
     return;
   }
 
   try {
-    const response = await fetch("http://localhost:8080/api/notifications", {
+    const response = await authFetch("/api/notifications", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         type: "Announcement",
         target: `Student:${notifStudent.Email}`,
@@ -66,17 +64,17 @@ const sendNotification = async () => {
     });
 
     if (!response.ok) {
-      alert("Notification send failed");
+      showToast("Failed to send notification.", "error");
       return;
     }
 
-    alert(`Notification sent to ${notifStudent.Fname}!`);
+    showToast(`Notification sent successfully to ${notifStudent.Fname}!`, "success");
     setNotifModal(false);
     setNotifMessage("");
     setNotifStudent(null);
   } catch (error) {
     console.log(error);
-    alert("Backend not connected");
+    showToast("Unable to connect to backend server.", "error");
   }
 };
 
@@ -88,28 +86,26 @@ const sendNotification = async () => {
    const student = students.find((s) => s.Email === email);
 
    if (!student) {
-     alert("Student not found");
+     showToast("Student profile not found.", "error");
      return;
    }
 
    try {
-     const response = await fetch(
-       `http://localhost:8080/api/students/${student.id}/status`,
+     const response = await authFetch(
+       `/api/students/${student.id}/status`,
        {
          method: "PUT",
-         headers: {
-           "Content-Type": "application/json",
-         },
          body: JSON.stringify({ status: status }),
        },
      );
 
      if (!response.ok) {
-       alert("Status update failed");
+       showToast("Failed to update student status.", "error");
        return;
      }
 
      await fetchStudents();
+     showToast(`Student status updated to ${status}!`, "success");
 
      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
      if (currentUser && currentUser.Email === email) {
@@ -120,7 +116,7 @@ const sendNotification = async () => {
      }
    } catch (error) {
      console.log(error);
-     alert("Backend not connected");
+     showToast("Unable to connect to backend server.", "error");
    }
  };
 

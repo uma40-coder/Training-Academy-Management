@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/Studentreg.css";
 import { Link, useNavigate } from "react-router-dom";
+import { showToast } from "../components/Toast";
 
 const Studentreg = () => {
   const [StudPass, setStudPass] = useState("");
@@ -40,12 +41,12 @@ const Studentreg = () => {
      !Timing ||
      !Phone
    ) {
-     alert("fill all fields");
+     showToast("Please fill in all required fields.", "warning");
      return;
    }
 
    if (StudPass !== Studconfirm) {
-     alert("password do not match");
+     showToast("Passwords do not match.", "warning");
      return;
    }
 
@@ -75,29 +76,36 @@ const Studentreg = () => {
 
      if (!response.ok) {
        const errorMessage = await response.text();
-       alert(errorMessage);
+       showToast(errorMessage || "Registration failed.", "error");
        return;
      }
 
-     alert("registered successfully");
-     navigate("/studentlogin");
+     showToast("Registration successful! Redirecting to login...", "success");
+     setTimeout(() => {
+       navigate("/studentlogin");
+     }, 1200);
    } catch (error) {
      console.log(error);
-     alert("Backend not connected");
+     showToast("Unable to connect to backend server.", "error");
    } finally {
      setIsSubmitting(false);
    }
  };
 
   return (
-    <div className="form_container">
-      <h2 className="stud_head">student registeration</h2>
+    <div className="form_container" style={{ position: "relative" }}>
+      <Link to="/" style={{ position: "absolute", top: 20, left: 24, textDecoration: "none", color: "#7C6FFF", fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+        ← Back to Home
+      </Link>
+      <div className="reg-orb-1"></div>
+      <div className="reg-orb-2"></div>
+      <h2 className="stud_head" style={{ marginTop: 24 }}>student registeration</h2>
       <h5>
         Join NexAcademy Today 🚀 Start your journey toward a successful tech
         career
       </h5>
       <div className="formfill">
-        <form onSubmit={hanleSubmit}>
+        <form onSubmit={hanleSubmit} autoComplete="off">
           <div className="row1">
             <div className="from-grp">
               <label htmlFor="fname">First Name</label>
@@ -107,6 +115,7 @@ const Studentreg = () => {
                 placeholder="enter fname"
                 value={Fname}
                 onChange={(e) => setFname(e.target.value)}
+                autoComplete="off"
               />
             </div>
 
@@ -118,24 +127,27 @@ const Studentreg = () => {
                 placeholder="enter lname"
                 value={Lname}
                 onChange={(e) => setLname(e.target.value)}
+                autoComplete="off"
               />
             </div>
           </div>
 
           <div className="from-grp">
             <label>Degree name</label>
-            <select>
-              <option value="a" disabled>
-                - - - - - - Select Degree name - - - - - -
+            <select defaultValue="">
+              <option value="" disabled>
+                -- Select Degree Name --
               </option>
-              <option value="b">Bsc</option>
-              <option value="c">BE</option>
-              <option value="d">Msc</option>
-              <option value="e">BA</option>
-              <option value="f">B.Com</option>
-              <option value="g">M.Com</option>
-              <option value="h">BBA</option>
-              <option value="i">MBA</option>
+              <option value="Bsc">BSc</option>
+              <option value="BE">BE / B.Tech</option>
+              <option value="Msc">MSc</option>
+              <option value="BA">BA</option>
+              <option value="B.Com">B.Com</option>
+              <option value="M.Com">M.Com</option>
+              <option value="BBA">BBA</option>
+              <option value="MBA">MBA</option>
+              <option value="BCA">BCA</option>
+              <option value="MCA">MCA</option>
             </select>
           </div>
 
@@ -184,6 +196,7 @@ const Studentreg = () => {
                 placeholder="email"
                 value={Email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="new-password"
               />
             </div>
           </div>
@@ -199,6 +212,7 @@ const Studentreg = () => {
                 onChange={(e) => {
                   setStudPass(e.target.value);
                 }}
+                autoComplete="new-password"
               />
             </div>
             <div className="from-grp">
@@ -211,6 +225,7 @@ const Studentreg = () => {
                 onChange={(e) => {
                   setStudconfirm(e.target.value);
                 }}
+                autoComplete="new-password"
               />
             </div>
           </div>
@@ -298,8 +313,8 @@ const Studentreg = () => {
               </option>
               <option value="9 AM - 11 AM">9 AM - 11 AM</option>
               <option value="11 AM - 1 PM">11 AM - 1 PM</option>
-              <option value="2 AM - 4 PM">2 AM - 4 PM</option>
-              <option value="6 PM - 8 PM">6 PM - 8 PM</option>
+              <option value="2 PM - 4 PM">2 PM - 4 PM</option>
+              <option value="4 PM - 6 PM">4 PM - 6 PM</option>
             </select>
           </div>
 

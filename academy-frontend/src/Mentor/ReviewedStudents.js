@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/MentorDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const ReviewedStudents = () => {
   const currentMentor = JSON.parse(localStorage.getItem("currentMentor"));
@@ -7,7 +9,7 @@ const ReviewedStudents = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/students");
+      const response = await authFetch("/api/students");
       const data = await response.json();
 
       const formatted = data.map((s) => ({
@@ -27,7 +29,7 @@ const ReviewedStudents = () => {
       setStudents(formatted);
     } catch (error) {
       console.log(error);
-      alert("Students load aagala. Backend check pannunga.");
+      showToast("Failed to load reviewed students. Please check backend connection.", "error");
     }
   };
 

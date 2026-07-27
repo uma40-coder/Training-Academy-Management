@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { logout } from "../utils/auth";
 import { MdDashboard } from "react-icons/md";
 import { FaUsers, FaCheckCircle, FaUser } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
@@ -36,6 +37,7 @@ const MentorSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    logout("mentor");
     localStorage.removeItem("currentMentor");
     navigate("/mentorlogin");
   };
@@ -65,7 +67,10 @@ const MentorSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
         <button
           className="mentor-nav-item"
-          onClick={handleLogout}
+          onClick={() => {
+            setSidebarOpen(false);
+            handleLogout();
+          }}
           style={{
             border: "none",
             background: "transparent",

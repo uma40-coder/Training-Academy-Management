@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { authFetch } from "../utils/api";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
+import { FaBusinessTime } from "react-icons/fa6";
+import { FaBook } from "react-icons/fa6";
 
 const Dashboard = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -8,9 +13,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch(
-          "http://localhost:8080/api/students",
-        );
+        const studentsResponse = await authFetch("/api/students");
         const studentsData = await studentsResponse.json();
 
         const freshStudent = studentsData.find(
@@ -36,9 +39,7 @@ const Dashboard = () => {
           localStorage.setItem("currentUser", JSON.stringify(formattedUser));
         }
 
-        const mentorsResponse = await fetch(
-          "http://localhost:8080/api/mentors",
-        );
+        const mentorsResponse = await authFetch("/api/mentors");
         const mentorsData = await mentorsResponse.json();
         setMentors(mentorsData);
       } catch (error) {
@@ -106,55 +107,63 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       {student.mentorRecommendation ? (
-        <div className="notification-card">
-          <span className="notification-icon">🔔</span>
-          <span>
-            Mentor review: {student.mentorRecommendation}.{" "}
-            {student.mentorComment}
-          </span>
+        <div className="notification-card mentor-alert">
+          <div className="notification-icon-wrap">
+            <span className="notification-icon">🔔</span>
+          </div>
+          <div className="notification-body">
+            <div className="notification-title">Mentor Review Completed</div>
+            <div className="notification-text">
+              Recommendation: <strong>{student.mentorRecommendation}</strong>. {student.mentorComment}
+            </div>
+          </div>
         </div>
       ) : assignedMentor ? (
-        <div className="notification-card">
-          <span className="notification-icon">👨‍🏫</span>
-          <span>
-            Your mentor is assigned: {assignedMentor.name}. Review is pending.
-          </span>
+        <div className="notification-card mentor-alert">
+          <div className="notification-icon-wrap">
+            <span className="notification-icon">👨‍🏫</span>
+          </div>
+          <div className="notification-body">
+            <div className="notification-title">Mentor Assigned</div>
+            <div className="notification-text">
+              Your mentor is assigned: <strong>{assignedMentor.name}</strong>. Review is pending.
+            </div>
+          </div>
         </div>
       ) : (
-        <div
-          className="notification-card"
-          style={{
-            background: "var(--accent-soft)",
-            borderColor: "var(--accent)",
-          }}
-        >
-          <span className="notification-icon">⏳</span>
-          <span>
-            Your application is approved! Waiting for mentor assignment.
-          </span>
+        <div className="notification-card mentor-alert">
+          <div className="notification-icon-wrap">
+            <span className="notification-icon">⏳</span>
+          </div>
+          <div className="notification-body">
+            <div className="notification-title">Application Approved</div>
+            <div className="notification-text">
+              Your application is approved! Waiting for mentor assignment.
+            </div>
+          </div>
         </div>
       )}
       <div className="dash-cards">
         <div className="dash-card">
-          <div className="dash-card-icon">📚</div>
+          <div className="dash-card-icon"><FaBook /></div>
           <div className="dash-card-label">Course</div>
           <div className="dash-card-value">{student.Course}</div>
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">⏰</div>
+          <div className="dash-card-icon"><FaBusinessTime /></div>
           <div className="dash-card-label">Batch</div>
           <div className="dash-card-value">{student.Timing || "TBD"}</div>
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">✅</div>
+          <div className="dash-card-icon"><TiTick /></div>
           <div className="dash-card-label">Status</div>
           <div className="dash-card-value approved">{student.status}</div>
         </div>
 
         <div className="dash-card">
-          <div className="dash-card-icon">👨‍🏫</div>
+          <div className="dash-card-icon"><FaChalkboardTeacher /></div>
           <div className="dash-card-label">Mentor</div>
           <div className="dash-card-value">
             {assignedMentor ? assignedMentor.name : "Not Assigned"}

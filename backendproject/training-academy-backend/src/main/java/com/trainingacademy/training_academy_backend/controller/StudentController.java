@@ -2,7 +2,9 @@ package com.trainingacademy.training_academy_backend.controller;
 
 import com.trainingacademy.training_academy_backend.entity.Student;
 import com.trainingacademy.training_academy_backend.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +14,9 @@ import java.util.List;
 public class StudentController {
 
     private final StudentRepository studentRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public StudentController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -33,6 +38,10 @@ public ResponseEntity<?> registerStudent(@RequestBody Student student) {
     }
 
     try {
+        // BCrypt-encode the password so login can verify it
+        if (student.getPassword() != null && !student.getPassword().isEmpty()) {
+            student.setPassword(passwordEncoder.encode(student.getPassword()));
+        }
         student.setStatus("pending");
         Student savedStudent = studentRepository.save(student);
         return ResponseEntity.ok(savedStudent);

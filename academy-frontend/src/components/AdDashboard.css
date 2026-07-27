@@ -11,7 +11,7 @@
   --danger:       #F55252;   /* ← fix pannunga */
   --text:         #EEF2F7;   /* ← add pannunga */
   --muted:        #7A8BA8;
-  --border:       #333A55;
+  --border:       #333A55; 
     --text: #EEF2F7; 
 
 }
@@ -517,3 +517,428 @@
   margin-top: 2px;
   flex-shrink: 0;
 }
+
+/* ── Overlay: hidden by default, shown on mobile via JSX conditional ── */
+.overlay {
+  display: none;
+}
+
+/* ── Sidebar: always visible on desktop ── */
+.sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 220px;
+  height: calc(100vh - 60px);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;        /* Firefox: hide sidebar scrollbar */
+  -ms-overflow-style: none;     /* IE/Edge: hide sidebar scrollbar */
+  transition: left 0.3s ease;
+  z-index: 150;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;                /* Chrome/Safari: hide sidebar scrollbar */
+}
+
+/* ── Mobile: sidebar slides in from left ── */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -220px;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .dash-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* ── Top Hero Metrics Bar ── */
+.hero-metrics-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: linear-gradient(135deg, rgba(30, 34, 53, 0.7) 0%, rgba(21, 25, 40, 0.9) 100%);
+  border: 1px solid rgba(51, 58, 85, 0.8);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.hero-metric-pod {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+}
+
+.pod-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(124, 111, 255, 0.1);
+  border: 1px solid rgba(124, 111, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 8px rgba(124, 111, 255, 0.05);
+}
+
+.students-pod .pod-icon-wrap {
+  background: rgba(124, 111, 255, 0.12);
+  border-color: rgba(124, 111, 255, 0.3);
+}
+
+.mentors-pod .pod-icon-wrap {
+  background: rgba(167, 139, 250, 0.12);
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+.courses-pod .pod-icon-wrap {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.pod-icon {
+  font-size: 24px;
+}
+
+.pod-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.pod-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.pod-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.pod-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+  .hero-metrics-bar {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .pod-divider {
+    display: none;
+  }
+}
+
+/* ── Visualizations Section Grid ── */
+.admin-visual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .admin-visual-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.visual-panel {
+  background: linear-gradient(135deg, rgba(30, 34, 53, 0.6) 0%, rgba(21, 25, 40, 0.8) 100%);
+  border: 1px solid rgba(51, 58, 85, 0.7);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.panel-title h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+
+.sub-tag {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ── Concentric Radial Meter (Circle Chart) ── */
+.radial-meter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.radial-svg-wrap {
+  position: relative;
+  width: 170px;
+  height: 170px;
+}
+
+.radial-meter-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.radial-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 8;
+}
+
+.radial-ring {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.approved-ring {
+  stroke: var(--success);
+  filter: drop-shadow(0 0 4px rgba(40, 212, 104, 0.4));
+}
+
+.pending-ring {
+  stroke: var(--warning);
+  filter: drop-shadow(0 0 4px rgba(245, 166, 35, 0.4));
+}
+
+.rejected-ring {
+  stroke: var(--danger);
+  filter: drop-shadow(0 0 4px rgba(245, 82, 82, 0.4));
+}
+
+.radial-center-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.radial-center-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.radial-center-text {
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+}
+
+.radial-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.radial-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.legend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.legend-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.approved-item .dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.pending-item .dot { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+.rejected-item .dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+.legend-val-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.legend-val-box .pct {
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── Course Progress Gauge (Horizontal Meter) ── */
+.course-meters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.course-meter-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meter-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.meter-rank-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.meter-course-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.top-enroll-badge {
+  font-size: 10px;
+  background: rgba(245, 166, 35, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.meter-count-tag {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.meter-count-tag strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.meter-progress-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.meter-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent) 0%, #A78BFA 100%);
+  position: relative;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: meterGrow 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.is-top-course .meter-progress-fill {
+  background: linear-gradient(90deg, var(--accent) 0%, #38BDF8 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.meter-glow-line {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #fff;
+  box-shadow: 0 0 8px #fff;
+  border-radius: 999px;
+}
+
+@keyframes meterGrow {
+  from { width: 0%; }
+}
+
+.no-data-msg {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+  font-size: 13px;
+}

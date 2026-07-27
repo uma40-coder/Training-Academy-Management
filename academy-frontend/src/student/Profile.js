@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
+import { MdEdit } from "react-icons/md";
 
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -15,7 +18,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/students");
+        const response = await authFetch("/api/students");
         const data = await response.json();
 
         const freshStudent = data.find((s) => s.email === currentUser.Email);
@@ -62,13 +65,10 @@ const Profile = () => {
 
  const handleSave = async () => {
    try {
-     const response = await fetch(
-       `http://localhost:8080/api/students/${user.id}/profile`,
+     const response = await authFetch(
+       `/api/students/${user.id}/profile`,
        {
          method: "PUT",
-         headers: {
-           "Content-Type": "application/json",
-         },
          body: JSON.stringify({
            firstName: form.Fname,
            lastName: form.Lname,
@@ -80,7 +80,7 @@ const Profile = () => {
      if (!response.ok) {
        const errorMessage = await response.text();
        console.log(errorMessage);
-       alert("Profile update failed");
+       showToast("Failed to update profile.", "error");
        return;
      }
 
@@ -96,10 +96,10 @@ const Profile = () => {
      setUser(formattedUser);
      localStorage.setItem("currentUser", JSON.stringify(formattedUser));
      setEditing(false);
-     alert("Profile updated successfully");
+     showToast("Profile updated successfully!", "success");
    } catch (error) {
      console.log(error);
-     alert("Backend not connected");
+     showToast("Unable to connect to backend server.", "error");
    }
  };
 
@@ -171,7 +171,7 @@ const Profile = () => {
               </>
             ) : (
               <button className="btn-primary" onClick={() => setEditing(true)}>
-                ✏️ Edit Profile
+                <MdEdit /> Edit Profile
               </button>
             )}
           </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const Mentors = () => {
   const [mentors, setMentors] = useState([]);
@@ -18,18 +20,18 @@ const Mentors = () => {
 
   const fetchMentors = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/mentors");
+      const response = await authFetch("/api/mentors");
       const data = await response.json();
       setMentors(data);
     } catch (error) {
       console.log(error);
-      alert("Mentors load aagala. Backend check pannunga.");
+      showToast("Failed to load mentor list. Please check backend connection.", "error");
     }
   };
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/students");
+      const response = await authFetch("/api/students");
       const data = await response.json();
       setStudents(data);
     } catch (error) {
@@ -91,58 +93,57 @@ const Mentors = () => {
 
   const handleSave = async () => {
     if (!form.name.trim()) {
-      alert("Mentor name required!");
+      showToast("Mentor name is required.", "warning");
       return;
     }
 
     try {
       const url = editId
-        ? `http://localhost:8080/api/mentors/${editId}`
-        : "http://localhost:8080/api/mentors";
+        ? `/api/mentors/${editId}`
+        : "/api/mentors";
 
       const method = editId ? "PUT" : "POST";
 
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(form),
       });
 
       if (!response.ok) {
         const errorMessage = await response.text();
-        alert(errorMessage);
+        showToast(errorMessage || "Failed to save mentor details.", "error");
         return;
       }
 
       await fetchMentors();
       setShowModal(false);
+      showToast(editId ? "Mentor profile updated!" : "New mentor added successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this mentor?")) {
+    if (!window.confirm("Are you sure you want to delete this mentor?")) {
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/mentors/${id}`, {
+      const response = await authFetch(`/api/mentors/${id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-        alert("Delete failed");
+        showToast("Failed to delete mentor.", "error");
         return;
       }
 
       await fetchMentors();
+      showToast("Mentor deleted successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 

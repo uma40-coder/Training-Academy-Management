@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
+
 
 const Students = () => {
  const [students, setStudents] = useState([]);
 
  const fetchStudents = async () => {
    try {
-     const response = await fetch("http://localhost:8080/api/students");
+     const response = await authFetch("/api/students");
      const data = await response.json();
 
      const formatted = data.map((s) => ({
@@ -23,7 +26,7 @@ const Students = () => {
      setStudents(formatted);
    } catch (error) {
      console.log(error);
-     alert("Students load aagala. Backend check pannunga.");
+     showToast("Failed to load student list. Please check backend connection.", "error");
    }
  };
 
@@ -32,7 +35,7 @@ const Students = () => {
  }, []);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [filterCourse, setFilterCourse] = useState("All"); // ← missing was this!
+  const [filterCourse, setFilterCourse] = useState("All");
 
   const courses = [...new Set(students.map((s) => s.Course))];
 
@@ -49,50 +52,34 @@ const Students = () => {
     return matchSearch && matchStatus && matchCourse;
   });
 
-  // const deleteStudent = (email) => {
-  //   if (window.confirm("Delete this student?")) {
-  //     const updated = students.filter((s) => s.Email !== email);
-  //     setStudents(updated);
-  //     localStorage.setItem("Students_detail", JSON.stringify(updated));
-
-  //     // currentUser also check pannunga ← add this!
-  //     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  //     if (currentUser && currentUser.Email === email) {
-  //       localStorage.removeItem("currentUser");
-  //     }
-  //   }
-  // };
-
  const toggleStatus = async (email) => {
    const student = students.find((s) => s.Email === email);
    const newStatus = student.status === "inactive" ? "approved" : "inactive";
 
    if (
      !window.confirm(
-       `${newStatus === "inactive" ? "Deactivate" : "Activate"} this student?`,
+       `Are you sure you want to ${newStatus === "inactive" ? "deactivate" : "activate"} this student?`,
      )
    ) {
      return;
    }
 
    try {
-     const response = await fetch(
-       `http://localhost:8080/api/students/${student.id}/status`,
+     const response = await authFetch(
+       `/api/students/${student.id}/status`,
        {
          method: "PUT",
-         headers: {
-           "Content-Type": "application/json",
-         },
          body: JSON.stringify({ status: newStatus }),
        },
      );
 
      if (!response.ok) {
-       alert("Status update failed");
+       showToast("Failed to update student status.", "error");
        return;
      }
 
      await fetchStudents();
+     showToast(`Student account ${newStatus === "inactive" ? "deactivated" : "activated"} successfully!`, "success");
 
      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
      if (currentUser && currentUser.Email === email) {
@@ -103,7 +90,7 @@ const Students = () => {
      }
    } catch (error) {
      console.log(error);
-     alert("Backend not connected");
+     showToast("Unable to connect to backend server.", "error");
    }
  };
 
@@ -128,7 +115,7 @@ const Students = () => {
         <input
           className="admin-search"
           type="text"
-          placeholder="🔍 Search by name, email..."
+          placeholder=" Search by name, email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

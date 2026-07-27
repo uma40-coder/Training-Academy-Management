@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { authFetch } from "../utils/api";
 
 const Mentor = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -9,9 +11,7 @@ const Mentor = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch(
-          "http://localhost:8080/api/students",
-        );
+        const studentsResponse = await authFetch("/api/students");
         const studentsData = await studentsResponse.json();
 
         const freshStudent = studentsData.find(
@@ -22,9 +22,7 @@ const Mentor = () => {
           setStudent(freshStudent);
         }
 
-        const mentorsResponse = await fetch(
-          "http://localhost:8080/api/mentors",
-        );
+        const mentorsResponse = await authFetch("/api/mentors");
         const mentorsData = await mentorsResponse.json();
 
         setMentors(mentorsData);
@@ -57,7 +55,7 @@ const Mentor = () => {
       <div className="mentor-container">
         <h2 className="page-title">My Mentor</h2>
         <div className="no-mentor-card">
-          <div className="no-mentor-icon">👨‍🏫</div>
+          <div className="no-mentor-icon">👨<FaChalkboardTeacher /></div>
           <h3>No Mentor Assigned Yet</h3>
           <p>Admin will assign your mentor soon!</p>
         </div>
@@ -68,6 +66,7 @@ const Mentor = () => {
   return (
     <div className="mentor-container">
       <h2 className="page-title">My Mentor</h2>
+      <p className="page-sub">Your assigned mentor information</p>
 
       <div className="mentor-profile-card">
         <div className="mentor-profile-top">

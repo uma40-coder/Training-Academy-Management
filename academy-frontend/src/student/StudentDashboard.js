@@ -99,7 +99,7 @@ const StudentDashboard = () => {
       {/* -------------sidebar-------------- */}
       <div className="app-body">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <div className="content">
+        <div className="dash-content">
           <Outlet />
         </div>
       </div>

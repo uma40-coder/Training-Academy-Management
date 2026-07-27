@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../components/StudentDashboard.css";
 import { FaBell } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import { authFetch } from "../utils/api";
 
 const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
   const [showNotif, setShowNotif] = useState(false);
@@ -12,9 +14,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsResponse = await fetch(
-          "http://localhost:8080/api/students",
-        );
+        const studentsResponse = await authFetch("/api/students");
         const studentsData = await studentsResponse.json();
 
         const freshStudent = studentsData.find(
@@ -23,9 +23,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
 
         setStudent(freshStudent);
 
-        const notificationsResponse = await fetch(
-          "http://localhost:8080/api/notifications",
-        );
+        const notificationsResponse = await authFetch("/api/notifications");
         const notificationsData = await notificationsResponse.json();
 
         setNotifications(notificationsData);
@@ -41,21 +39,35 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
     if (!student) return false;
 
     const target = notification.target;
+    if (!target) return false;
 
-    if (target === "All Students") {
+    const studEmail = (student.email || "").trim().toLowerCase();
+
+    // Direct student target (e.g. Student:email@example.com)
+    if (target.toLowerCase() === `student:${studEmail}`) {
       return true;
     }
 
-    if (target === `Course:${student.course}`) {
-      return true;
+    // Multiple student target (e.g. Students:a@gmail.com,b@gmail.com)
+    if (target.toLowerCase().startsWith("students:")) {
+      const emails = target
+        .slice(9)
+        .split(",")
+        .map((e) => e.trim().toLowerCase());
+      return emails.includes(studEmail);
     }
 
-    if (target === `Timing:${student.timing}`) {
-      return true;
-    }
-
-    if (target === `Student:${student.email}`) {
-      return true;
+    // Broadcasts for active/approved students only
+    if (student.status === "approved") {
+      if (target === "All Students") {
+        return true;
+      }
+      if (target === `Course:${student.course}`) {
+        return true;
+      }
+      if (target === `Timing:${student.timing}`) {
+        return true;
+      }
     }
 
     return false;
@@ -66,7 +78,8 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
     .slice()
     .reverse();
 
-  const readKey = `read_notifications_${currentUser.Email}`;
+  const userEmailKey = (student?.email || currentUser?.Email || "user").trim().toLowerCase();
+  const readKey = `read_notifications_${userEmailKey}`;
   const readIds = JSON.parse(localStorage.getItem(readKey)) || [];
 
   const unreadNotifications = visibleNotifications.filter(
@@ -113,28 +126,35 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
 
         {showNotif && (
           <div className="notif-popup">
-            <h4>Notifications</h4>
+            <h4>
+              <span>Notifications</span>
+              <button className="notif-close-btn" onClick={() => setShowNotif(false)}>
+                <IoClose />
+              </button>
+            </h4>
 
-            {visibleNotifications.length === 0 ? (
-              <div className="notif-item" style={{ color: "var(--muted)" }}>
-                No notifications yet
-              </div>
-            ) : (
-              visibleNotifications.map((n) => (
-                <div className="notif-item" key={n.id}>
-                  <div>{n.message}</div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: "var(--muted)",
-                      marginTop: 4,
-                    }}
-                  >
-                    {n.type} • {n.time}
-                  </div>
+            <div className="notif-list">
+              {visibleNotifications.length === 0 ? (
+                <div className="notif-item" style={{ color: "var(--muted)", textAlign: "center" }}>
+                  No notifications yet
                 </div>
-              ))
-            )}
+              ) : (
+                visibleNotifications.map((n) => (
+                  <div className="notif-item" key={n.id}>
+                    <div style={{ fontWeight: "600", marginBottom: "4px" }}>{n.message}</div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "var(--muted)",
+                        marginTop: 4,
+                      }}
+                    >
+                      {n.type} • {n.time}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         )}
 

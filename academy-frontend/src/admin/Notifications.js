@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
+import { FaMessage } from "react-icons/fa6";
+import { IoSend } from "react-icons/io5";
 
 const notifTypes = [
   "Announcement",
@@ -16,10 +20,10 @@ const typeColors = {
 };
 
 const typeIcons = {
-  Announcement: "📢",
-  "Batch Info": "📅",
-  "Holiday Notice": "🏖️",
-  "Class Reminder": "🔔",
+  Announcement: <FaMessage />,
+  "Batch Info": "",
+  "Holiday Notice": "",
+  "Class Reminder": "",
 };
 
 const Notifications = () => {
@@ -36,20 +40,20 @@ const Notifications = () => {
 
   const fetchData = async () => {
     try {
-      const notifRes = await fetch("http://localhost:8080/api/notifications");
+      const notifRes = await authFetch("/api/notifications");
       const notifData = await notifRes.json();
       setNotifications([...notifData].reverse());
 
-      const studentsRes = await fetch("http://localhost:8080/api/students");
+      const studentsRes = await authFetch("/api/students");
       const studentsData = await studentsRes.json();
       setStudents(studentsData);
 
-      const coursesRes = await fetch("http://localhost:8080/api/courses");
+      const coursesRes = await authFetch("/api/courses");
       const coursesData = await coursesRes.json();
       setCourses(coursesData);
     } catch (error) {
       console.log(error);
-      alert("Data load aagala. Backend check pannunga.");
+      showToast("Failed to load notification data. Please check backend connection.", "error");
     }
   };
 
@@ -64,51 +68,59 @@ const Notifications = () => {
 
   const handleSend = async () => {
     if (!form.message.trim()) {
-      alert("Please enter a message!");
+      showToast("Please enter a notification message.", "warning");
       return;
     }
 
+    let finalTarget = form.target;
+
+    if (form.target === "All Students") {
+      const emails = approvedStudents.map((s) => s.email).join(",");
+      finalTarget = `Students:${emails}`;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/api/notifications", {
+      const response = await authFetch("/api/notifications", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          type: form.type,
+          target: finalTarget,
+          message: form.message,
+        }),
       });
 
       if (!response.ok) {
-        alert("Notification send failed");
+        showToast("Failed to send notification.", "error");
         return;
       }
 
       await fetchData();
       setForm({ type: "Announcement", target: "All Students", message: "" });
       setShowModal(false);
+      showToast("Notification sent successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/notifications/${id}`,
-        {
-          method: "DELETE",
-        },
+      const response = await authFetch(
+        `/api/notifications/${id}`,
+        { method: "DELETE" },
       );
 
       if (!response.ok) {
-        alert("Delete failed");
+        showToast("Failed to delete notification.", "error");
         return;
       }
 
       await fetchData();
+      showToast("Notification deleted successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
@@ -127,7 +139,7 @@ const Notifications = () => {
           className="admin-btn-primary"
           onClick={() => setShowModal(true)}
         >
-          📤 Send Notification
+          <IoSend /> Send Notification
         </button>
       </div>
 
@@ -227,7 +239,7 @@ const Notifications = () => {
                   value={form.target}
                   onChange={(e) => setForm({ ...form, target: e.target.value })}
                 >
-                  <option value="All Students">All Students</option>
+                  <option value="All Students">All Current Students</option>
 
                   <option disabled>--- Course Wise ---</option>
                   {courses.map((c) => (
@@ -279,7 +291,7 @@ const Notifications = () => {
                 Cancel
               </button>
               <button className="admin-btn-primary" onClick={handleSend}>
-                📤 Send
+                <IoSend /> Send
               </button>
             </div>
           </div>

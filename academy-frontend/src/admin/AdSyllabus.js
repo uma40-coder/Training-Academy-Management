@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const AdSyllabus = () => {
   const [courses, setCourses] = useState([]);
@@ -17,7 +19,7 @@ const AdSyllabus = () => {
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/courses");
+      const response = await authFetch("/api/courses");
       const data = await response.json();
 
       setCourses(data);
@@ -27,18 +29,18 @@ const AdSyllabus = () => {
       }
     } catch (error) {
       console.log(error);
-      alert("Courses load aagala. Backend check pannunga.");
+      showToast("Failed to load courses. Please check backend connection.", "error");
     }
   };
 
   const fetchSyllabus = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/syllabus");
+      const response = await authFetch("/api/syllabus");
       const data = await response.json();
       setSyllabusItems(data);
     } catch (error) {
       console.log(error);
-      alert("Syllabus load aagala. Backend check pannunga.");
+      showToast("Failed to load syllabus items. Please check backend connection.", "error");
     }
   };
 
@@ -58,16 +60,13 @@ const AdSyllabus = () => {
 
   const addModule = async () => {
     if (!moduleName.trim()) {
-      alert("Module name required!");
+      showToast("Module name is required.", "warning");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/syllabus", {
+      const response = await authFetch("/api/syllabus", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           courseName: selectedCourse,
           moduleName: moduleName.trim(),
@@ -76,31 +75,29 @@ const AdSyllabus = () => {
       });
 
       if (!response.ok) {
-        alert("Module add failed");
+        showToast("Failed to add module.", "error");
         return;
       }
 
       await fetchSyllabus();
       setModuleName("");
       setShowModuleModal(false);
+      showToast("Module added successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const addTopic = async () => {
     if (!topicName.trim()) {
-      alert("Topic name required!");
+      showToast("Topic name is required.", "warning");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/syllabus", {
+      const response = await authFetch("/api/syllabus", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           courseName: selectedCourse,
           moduleName: selectedModuleName,
@@ -109,39 +106,41 @@ const AdSyllabus = () => {
       });
 
       if (!response.ok) {
-        alert("Topic add failed");
+        showToast("Failed to add topic.", "error");
         return;
       }
 
       await fetchSyllabus();
       setTopicName("");
       setShowTopicModal(false);
+      showToast("Topic added successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const deleteTopic = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/syllabus/${id}`, {
+      const response = await authFetch(`/api/syllabus/${id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-        alert("Delete failed");
+        showToast("Failed to delete topic.", "error");
         return;
       }
 
       await fetchSyllabus();
+      showToast("Topic deleted successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
   const deleteModule = async (moduleName) => {
-    if (!window.confirm("Delete this module and all topics?")) {
+    if (!window.confirm("Are you sure you want to delete this module and all its topics?")) {
       return;
     }
 
@@ -149,15 +148,16 @@ const AdSyllabus = () => {
 
     try {
       for (const topic of moduleTopics) {
-        await fetch(`http://localhost:8080/api/syllabus/${topic.id}`, {
+        await authFetch(`/api/syllabus/${topic.id}`, {
           method: "DELETE",
         });
       }
 
       await fetchSyllabus();
+      showToast("Module and topics deleted successfully!", "success");
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 

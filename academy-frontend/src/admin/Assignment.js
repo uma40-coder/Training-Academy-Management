@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../components/AdDashboard.css";
+import { authFetch } from "../utils/api";
+import { showToast } from "../components/Toast";
 
 const Assignment = () => {
   const [students, setStudents] = useState([]);
@@ -8,7 +10,7 @@ const Assignment = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/students");
+      const response = await authFetch("/api/students");
       const data = await response.json();
 
       const formatted = data.map((s) => ({
@@ -28,18 +30,18 @@ const Assignment = () => {
       setStudents(formatted);
     } catch (error) {
       console.log(error);
-      alert("Students load aagala. Backend check pannunga.");
+      showToast("Failed to load student data. Please check backend connection.", "error");
     }
   };
 
   const fetchMentors = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/mentors");
+      const response = await authFetch("/api/mentors");
       const data = await response.json();
       setMentors(data);
     } catch (error) {
       console.log(error);
-      alert("Mentors load aagala. Backend check pannunga.");
+      showToast("Failed to load mentor data. Please check backend connection.", "error");
     }
   };
 
@@ -69,13 +71,10 @@ const Assignment = () => {
 
   const assignMentor = async (student, mentorId) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/students/${student.id}/assign-mentor`,
+      const response = await authFetch(
+        `/api/students/${student.id}/assign-mentor`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             assignedMentor: mentorId ? Number(mentorId) : null,
           }),
@@ -83,11 +82,12 @@ const Assignment = () => {
       );
 
       if (!response.ok) {
-        alert("Mentor assign failed");
+        showToast("Failed to update mentor assignment.", "error");
         return;
       }
 
       await fetchStudents();
+      showToast("Mentor assignment updated successfully!", "success");
 
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (currentUser && currentUser.Email === student.Email) {
@@ -101,7 +101,7 @@ const Assignment = () => {
       }
     } catch (error) {
       console.log(error);
-      alert("Backend not connected");
+      showToast("Unable to connect to backend server.", "error");
     }
   };
 
